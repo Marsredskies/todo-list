@@ -18,7 +18,7 @@ func GetConfig() (Config, error) {
 	if err := envconfig.Process("APP", &cfg); err != nil {
 		return cfg, err
 	}
-
+	
 	return cfg, nil
 }
 
