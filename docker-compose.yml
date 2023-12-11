@@ -13,7 +13,8 @@ services:
   server:
     build: ./
     environment:
-      - PG_URL=$PG_URL
+      PG_URL: $PG_URL
+      STATIC_TOKEN: $STATIC_TOKEN
     ports:
       - $PORT:8080
     depends_on:

@@ -9,7 +9,7 @@ import (
 type Config struct {
 	Port  int    `envconfig:"PORT" default:"8080"`
 	PgURL string `envconfig:"PG_URL" default:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"`
-	Token string `envconfig:"TOKEN" default:"test_token"`
+	StaticToken string `envconfig:"STATIC_TOKEN"`
 }
 
 func GetConfig() (Config, error) {
