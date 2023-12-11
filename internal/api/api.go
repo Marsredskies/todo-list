@@ -8,11 +8,13 @@ import (
 	"github.com/Marsredskies/todo-list/internal/envconfig"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 type API struct {
-	echo *echo.Echo
-	db   *db.DB
+	echo   *echo.Echo
+	r      Repository
+	logger *log.Logger
 }
 
 func MustInitNewAPI(ctx context.Context, cnf envconfig.Config) API {
@@ -31,14 +33,19 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 	}))
 	e.Pre(middleware.RemoveTrailingSlash())
 
-	db, err := db.New(ctx, cnf)
+	dbClient, err := db.New(ctx, cnf)
 	if err != nil {
 		return API{}, err
 	}
 
+	logger := log.New()
+
+	r := db.NewTaskRepo(dbClient)
+
 	api := API{
-		echo: e,
-		db:   db,
+		echo:   e,
+		r:      r,
+		logger: logger,
 	}
 
 	e.GET("/search-with-filters", api.handleFindTask)
