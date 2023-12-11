@@ -53,11 +53,6 @@ func (a *API) handleUpdateTask(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, noTasksFound)
 	}
 
-	err = params.Validate()
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-
 	err = a.r.UpdateTaskById(c.Request().Context(), params)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
@@ -96,6 +91,10 @@ func (a *API) handleFindTask(c echo.Context) error {
 	results, err := a.r.GetMatchingTasks(c.Request().Context(), params)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	if len(results) == 0 {
+		return c.JSON(http.StatusNotFound, noTasksFound)
 	}
 
 	return c.JSON(http.StatusOK, results)
