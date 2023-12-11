@@ -7,15 +7,15 @@ import (
 )
 
 type Config struct {
-	Port        int    `envconfig:"PORT" default:"8080"`
-	PgURL       string `envconfig:"PG_URL" default:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"`
-	StaticToken string `envconfig:"STATIC_TOKEN"`
+	Port        int    `envconfig:"APP_PORT" default:"8080"`
+	PgURL       string `envconfig:"APP_PG_URL" default:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"`
+	StaticToken string `envconfig:"APP_STATIC_TOKEN" default:"test_token"`
 }
 
 func GetConfig() (Config, error) {
 	var cfg Config
 
-	if err := envconfig.Process("core", &cfg); err != nil {
+	if err := envconfig.Process("APP", &cfg); err != nil {
 		return cfg, err
 	}
 
