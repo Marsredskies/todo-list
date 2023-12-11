@@ -13,6 +13,7 @@ import (
 
 type API struct {
 	echo   *echo.Echo
+	token  string
 	r      Repository
 	logger *log.Logger
 }
@@ -32,6 +33,13 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		Format: `"method":"${method}","uri":"${uri}","status":${status}` + "\n",
 	}))
 	e.Pre(middleware.RemoveTrailingSlash())
+
+	if cnf.StaticToken != "" {
+		e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
+			KeyLookup: "query:token",
+			Validator: NewTokenValidator(cnf),
+		}))
+	}
 
 	dbClient, err := db.New(ctx, cnf)
 	if err != nil {
