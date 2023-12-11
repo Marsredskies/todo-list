@@ -4,7 +4,7 @@ ARG COMMIT_SHA
 
 WORKDIR /app
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.GitCommitSHA=$COMMIT_SHA" -o /bin/server cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bin/server cmd/main.go
 
 FROM alpine:3.16
 
