@@ -26,7 +26,8 @@ func (a *API) handleCreateTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	a.logger.Infof("task with id %d created: %+v", id, params)
+	params.ID = id
+	a.Logger.Infof("task with id %d created: %+v", id, params)
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("task has been created successfuly with ID %d", id))
 
@@ -62,7 +63,7 @@ func (a *API) handleUpdateTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	a.logger.Infof("task with updated: %+v", params)
+	a.Logger.Infof("task with updated: %+v", params)
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("task has been updated successfuly"))
 }
@@ -79,7 +80,7 @@ func (a *API) handleDeleteTask(c echo.Context) error {
 		c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	a.logger.Infof("task with id %d has been deleted", id)
+	a.Logger.Infof("task with id %d has been deleted", id)
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("task with id %d has been deleted", id))
 }

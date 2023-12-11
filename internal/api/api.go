@@ -15,7 +15,7 @@ type API struct {
 	echo   *echo.Echo
 	token  string
 	r      Repository
-	logger *log.Logger
+	Logger *log.Logger
 }
 
 func MustInitNewAPI(ctx context.Context, cnf envconfig.Config) API {
@@ -53,7 +53,7 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 	api := API{
 		echo:   e,
 		r:      r,
-		logger: logger,
+		Logger: logger,
 	}
 
 	e.GET("/search-with-filters", api.handleFindTask)
