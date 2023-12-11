@@ -21,6 +21,14 @@ func (d *DB) ExecCtx(ctx context.Context, query string, args ...interface{}) err
 	return nil
 }
 
+func (d *DB) SelectCtx(ctx context.Context, dest any, query string, args ...interface{}) error {
+	err := d.db.SelectContext(ctx, dest, query, args...)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 func (d *DB) GetById(dest any, query string, args ...interface{}) error {
 	err := d.db.Get(dest, query, args...)
 	if err != nil {
