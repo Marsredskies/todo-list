@@ -3,9 +3,11 @@ package api
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/Marsredskies/todo-list/internal/models"
 	"github.com/labstack/echo"
@@ -65,7 +67,52 @@ func (a *API) handleUpdateTask(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("task has been updated successfuly"))
+}
 
+func (a *API) handleDeleteTask(c echo.Context) error {
+	idStr := c.FormValue("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, invalidIdFormat)
+	}
+
+	err = a.deleteById(c.Request().Context(), id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, fmt.Sprintf("task with id %d has been deleted", id))
+}
+
+func (a *API) handleFindTask(c echo.Context) error {
+	params := models.Task{
+		Name:        c.FormValue("name"),
+		Description: c.FormValue("description"),
+		Assignee:    c.FormValue("assignee"),
+		Status:      c.FormValue("status"),
+	}
+
+	results, err := a.getMatchingTasks(c.Request().Context(), params)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, results)
+}
+
+func (a *API) getMatchingTasks(ctx context.Context, params models.Task) ([]models.Task, error) {
+	var results []models.Task
+	query, args, err := params.SqlSelectLike()
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.db.SelectCtx(ctx, &results, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }
 
 func (a *API) saveTaskToDb(ctx context.Context, params models.Task) (int64, error) {
@@ -102,4 +149,21 @@ func (a *API) checkIfTaskExists(id int64) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func (a *API) deleteById(ctx context.Context, id int64) error {
+	err := a.db.ExecCtx(ctx,
+		`UPDATE public.tasks 
+			SET deleted_at = now() 
+				WHERE id = $1 AND deleted_at IS NULL`, id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("no tasks found")
+		}
+		return err
+	}
+
+	return nil
+
 }
