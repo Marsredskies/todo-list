@@ -10,7 +10,7 @@ services:
     ports:
       - 5432:5432
      
-  apod_service:
+  server:
     build: ./
     environment:
       - PG_URL=$PG_URL
