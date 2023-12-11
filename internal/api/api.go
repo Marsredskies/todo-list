@@ -41,9 +41,10 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		db:   db,
 	}
 
-	e.GET("/list", nil)
-	e.POST("/create", nil)
-	e.PATCH("/update", nil)
+	//e.GET("/search", nil)
+	e.POST("/create", api.handleCreateTask)
+	e.PATCH("/update-by-id", api.handleUpdateTask)
+	//e.DELETE("/delete-by-id", nil)
 
 	return api, nil
 }
