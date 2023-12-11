@@ -31,5 +31,6 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/lib/pq v1.10.7
+	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.8.4
 )
