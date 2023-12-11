@@ -32,7 +32,7 @@ func TestSaveAndUpdateTask(t *testing.T) {
 
 	api := MustInitNewAPI(ctx, cnf)
 
-	id, err := api.saveTaskToDb(ctx, createParams)
+	id, err := api.r.SaveTask(ctx, createParams)
 	require.NoError(t, err)
 
 	require.Equal(t, int64(1), id)
@@ -45,7 +45,7 @@ func TestSaveAndUpdateTask(t *testing.T) {
 		Status:      "done",
 	}
 
-	err = api.updateTaskById(ctx, updateParams)
+	err = api.r.UpdateTaskById(ctx, updateParams)
 	require.NoError(t, err)
 }
 
@@ -79,10 +79,10 @@ func TestFindTasks(t *testing.T) {
 
 	api := MustInitNewAPI(ctx, cnf)
 
-	_, err = api.saveTaskToDb(ctx, createParams1)
+	_, err = api.r.SaveTask(ctx, createParams1)
 	require.NoError(t, err)
 
-	_, err = api.saveTaskToDb(ctx, createParams2)
+	_, err = api.r.SaveTask(ctx, createParams2)
 	require.NoError(t, err)
 
 	searchParams := models.Task{
@@ -91,7 +91,7 @@ func TestFindTasks(t *testing.T) {
 		Assignee:    "person",
 	}
 
-	results, err := api.getMatchingTasks(ctx, searchParams)
+	results, err := api.r.GetMatchingTasks(ctx, searchParams)
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 }
