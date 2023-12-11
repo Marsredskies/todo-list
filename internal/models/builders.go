@@ -47,3 +47,30 @@ func (t *Task) Set(b sq.UpdateBuilder) sq.UpdateBuilder {
 
 	return b
 }
+
+func (t *Task) SqlSelectLike() (string, []interface{}, error) {
+	b := sq.Select("id", "name", "description", "status", "assignee").From("public.tasks")
+
+	if t.Name != "" {
+		b = b.Where("name LIKE ?", likeParam(t.Name))
+	}
+
+	if t.Description != "" {
+		b = b.Where("description LIKE ?", likeParam(t.Description))
+	}
+
+	if t.Assignee != "" {
+		b = b.Where("assignee LIKE ?", likeParam(t.Assignee))
+	}
+
+	if t.Status != "" {
+		b = b.Where("status LIKE ?", likeParam(t.Status))
+	}
+
+	b = b.Where("deleted_at IS NULL")
+	return b.PlaceholderFormat(sq.Dollar).ToSql()
+}
+
+func likeParam(v string) string {
+	return "%" + v + "%"
+}
