@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Marsredskies/todo-list/envconfig"
+	"github.com/Marsredskies/todo-list/internal/envconfig"
 	"github.com/jmoiron/sqlx"
 )
 

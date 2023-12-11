@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Marsredskies/todo-list/envconfig"
+	"github.com/Marsredskies/todo-list/internal/envconfig"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	migrate "github.com/rubenv/sql-migrate"
