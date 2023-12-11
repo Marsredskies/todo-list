@@ -41,10 +41,10 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		db:   db,
 	}
 
-	//e.GET("/search", nil)
+	e.GET("/search-with-filters", api.handleFindTask)
 	e.POST("/create", api.handleCreateTask)
 	e.PATCH("/update-by-id", api.handleUpdateTask)
-	//e.DELETE("/delete-by-id", nil)
+	e.DELETE("/delete", api.handleDeleteTask)
 
 	return api, nil
 }
