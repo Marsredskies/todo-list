@@ -2,21 +2,17 @@ package main
 
 import (
 	"context"
-	"log"
+	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
+	"time"
 
 	"github.com/Marsredskies/todo-list/internal/api"
 	"github.com/Marsredskies/todo-list/internal/db"
 	"github.com/Marsredskies/todo-list/internal/envconfig"
 )
 
-var GitCommitSHA string
-
 func main() {
-	log.Printf("Starting with CommitSHA: %s", GitCommitSHA)
-
 	ctx, cancel := context.WithCancel(context.Background())
 
 	cnf := envconfig.MustGetConfig()
@@ -25,18 +21,19 @@ func main() {
 
 	api := api.MustInitNewAPI(ctx, cnf)
 
-	api.StartServer(cnf.Port)
-
-	exit := make(chan os.Signal, 1)
-	signal.Notify(exit, syscall.SIGTERM, syscall.SIGINT)
-
-	defer func() {
-		if err := api.Shutdown(ctx); err != nil {
-			log.Println("error during shutting down the main server: ", err)
+	go func() {
+		if err := api.StartServer(cnf.Port); err != nil && err != http.ErrServerClosed {
+			api.Logger.Fatal("shutting down the server")
 		}
 	}()
 
-	<-exit
-	cancel()
-	log.Println("shutting down")
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := api.Shutdown(ctx); err != nil {
+		api.Logger.Fatal(err)
+	}
 }
