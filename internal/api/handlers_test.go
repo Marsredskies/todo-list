@@ -48,3 +48,50 @@ func TestSaveAndUpdateTask(t *testing.T) {
 	err = api.updateTaskById(ctx, updateParams)
 	require.NoError(t, err)
 }
+
+func TestFindTasks(t *testing.T) {
+	ctx := context.Background()
+
+	cnf := envconfig.MustGetConfig()
+
+	dbConn, err := db.ConnectDB(ctx, cnf)
+	require.NoError(t, err)
+
+	db.DropMigrations(dbConn)
+	db.MustApplyMigrations(ctx, cnf)
+
+	createParams1 := models.Task{
+		Name:        "first task",
+		Description: "description description task",
+		Assignee:    "person 1",
+		Status:      "done",
+	}
+
+	createParams2 := models.Task{
+		Name:        "secont task",
+		Description: "description for the second task",
+		Assignee:    "person 2",
+		Status:      "done",
+	}
+
+	require.NoError(t, createParams1.Validate())
+	require.NoError(t, createParams2.Validate())
+
+	api := MustInitNewAPI(ctx, cnf)
+
+	_, err = api.saveTaskToDb(ctx, createParams1)
+	require.NoError(t, err)
+
+	_, err = api.saveTaskToDb(ctx, createParams2)
+	require.NoError(t, err)
+
+	searchParams := models.Task{
+		Name:        "task",
+		Description: "description",
+		Assignee:    "person",
+	}
+
+	results, err := api.getMatchingTasks(ctx, searchParams)
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+}
