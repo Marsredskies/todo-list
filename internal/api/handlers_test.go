@@ -6,6 +6,7 @@ import (
 
 	"github.com/Marsredskies/todo-list/internal/db"
 	"github.com/Marsredskies/todo-list/internal/envconfig"
+	"github.com/Marsredskies/todo-list/internal/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,7 +21,7 @@ func TestSaveAndUpdateTask(t *testing.T) {
 	db.DropMigrations(dbConn)
 	db.MustApplyMigrations(ctx, cnf)
 
-	createParams := Task{
+	createParams := models.Task{
 		Name:        "test task",
 		Description: "description for the test task",
 		Assignee:    "smbd",
@@ -36,7 +37,7 @@ func TestSaveAndUpdateTask(t *testing.T) {
 
 	require.Equal(t, int64(1), id)
 
-	updateParams := Task{
+	updateParams := models.Task{
 		ID:          id,
 		Name:        "test task update",
 		Description: "updated description for the test task",

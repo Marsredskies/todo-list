@@ -7,11 +7,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Marsredskies/todo-list/internal/models"
 	"github.com/labstack/echo"
 )
 
 func (a *API) handleCreateTask(c echo.Context) error {
-	var params Task
+	var params models.Task
 	err := c.Bind(&params)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, incorrectDataFormat)
@@ -32,7 +33,7 @@ func (a *API) handleCreateTask(c echo.Context) error {
 }
 
 func (a *API) handleUpdateTask(c echo.Context) error {
-	var params Task
+	var params models.Task
 	err := c.Bind(&params)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, incorrectDataFormat)
@@ -67,8 +68,8 @@ func (a *API) handleUpdateTask(c echo.Context) error {
 
 }
 
-func (a *API) saveTaskToDb(ctx context.Context, params Task) (int64, error) {
-	query, args, err := params.sqlInsert()
+func (a *API) saveTaskToDb(ctx context.Context, params models.Task) (int64, error) {
+	query, args, err := params.SqlInsert()
 	if err != nil {
 		return 0, err
 	}
@@ -76,8 +77,8 @@ func (a *API) saveTaskToDb(ctx context.Context, params Task) (int64, error) {
 	return a.db.ExecCtxReturningId(ctx, query, args...)
 }
 
-func (a *API) updateTaskById(ctx context.Context, params Task) error {
-	query, args, err := params.sqlUpdate()
+func (a *API) updateTaskById(ctx context.Context, params models.Task) error {
+	query, args, err := params.SqlUpdate()
 	if err != nil {
 		return err
 	}
@@ -87,7 +88,7 @@ func (a *API) updateTaskById(ctx context.Context, params Task) error {
 }
 
 func (a *API) checkIfTaskExists(id int64) (bool, error) {
-	var task Task
+	var task models.Task
 	err := a.db.GetById(&task,
 		`SELECT name, description, assignee, status 
 			FROM public.tasks

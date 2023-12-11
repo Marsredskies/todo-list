@@ -1,24 +1,24 @@
-package api
+package models
 
 import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-func (p *Task) sqlInsert() (string, []interface{}, error) {
+func (t *Task) SqlInsert() (string, []interface{}, error) {
 	values := sq.Eq{
-		"name":        p.Name,
-		"description": p.Description,
+		"name":        t.Name,
+		"description": t.Description,
 		"status":      todo,
 	}
 
-	if p.Assignee != "" {
-		values["assignee"] = p.Assignee
+	if t.Assignee != "" {
+		values["assignee"] = t.Assignee
 	}
 
 	return sq.Insert("public.tasks").PlaceholderFormat(sq.Dollar).SetMap(values).Suffix("RETURNING id").ToSql()
 }
 
-func (t *Task) sqlUpdate() (string, []interface{}, error) {
+func (t *Task) SqlUpdate() (string, []interface{}, error) {
 	b := sq.Update("public.tasks")
 	b = t.Set(b)
 	b = b.Where("id = ?", t.ID)
