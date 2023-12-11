@@ -36,7 +36,7 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 
 	if cnf.StaticToken != "" {
 		e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
-			KeyLookup: "query:token",
+			KeyLookup: "header:token",
 			Validator: NewTokenValidator(cnf),
 		}))
 	}
