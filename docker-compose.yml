@@ -12,6 +12,8 @@ services:
      
   apod_service:
     build: ./
+    environment:
+      - PG_URL=$PG_URL
     ports:
       - $PORT:8080
     depends_on:
