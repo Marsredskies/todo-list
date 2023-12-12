@@ -109,6 +109,15 @@ func (a *API) handleDeleteTask(c echo.Context) error {
 		c.JSON(http.StatusBadRequest, invalidIdFormat)
 	}
 
+	exists, err := a.r.CheckIfTaskExists(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	if !exists {
+		return c.JSON(http.StatusNotFound, noTasksFound)
+	}
+
 	err = a.r.DeleteById(c.Request().Context(), id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
