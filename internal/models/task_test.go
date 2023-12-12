@@ -35,6 +35,11 @@ func TestValidator(t *testing.T) {
 			input:       Task{0, "name", "somebody", "in progress", ""},
 			expectedErr: errEmptyTaskDescription,
 		},
+		{
+			name:        "test empty task description",
+			input:       Task{0, "name", "", "in progress", "sometext"},
+			expectedErr: errNoAssignee,
+		},
 	}
 
 	for _, tc := range testCases {

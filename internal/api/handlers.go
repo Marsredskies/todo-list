@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -14,7 +13,7 @@ import (
 //
 //	@Security 	  StaticTokenAuth
 //	@Summary      CreateTask
-//	@Description  Creates to-do entry in the database. Name and description are required fields. Assignee value is optional. If status is empty default "to do" will be set
+//	@Description  Creates to-do entry in the database. Name, description and assignee are required fields. If status is empty default "to do" will be set
 //	@Tags         to-do list
 //	@Accept       json
 //	@Produce      json
@@ -25,19 +24,16 @@ import (
 func (a *API) handleCreateTask(c echo.Context) error {
 	var params models.Task
 	err := c.Bind(&params)
-	log.Println(err)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, incorrectDataFormat)
 	}
 
 	err = params.Validate()
-	log.Println(err)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	id, err := a.r.SaveTask(c.Request().Context(), params)
-	log.Println(err)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
