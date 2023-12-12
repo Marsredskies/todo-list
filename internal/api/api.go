@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	_ "github.com/Marsredskies/todo-list/docs"
 	"github.com/Marsredskies/todo-list/internal/db"
 	"github.com/Marsredskies/todo-list/internal/envconfig"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
-	_ "github.com/swaggo/echo-swagger/example/docs"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type API struct {
@@ -34,6 +35,7 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		Format: `"method":"${method}","uri":"${uri}","status":${status}` + "\n",
 	}))
 	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.CORS())
 
 	if cnf.StaticToken != "" {
 		e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
@@ -57,8 +59,6 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		Logger: logger,
 	}
 
-	//e.GET("/swagger/*", echoSwagger.WrapHandler)
-
 	e.GET("/search-with-filters", api.handleFindTask)
 	e.POST("/create", api.handleCreateTask)
 	e.PATCH("/update-by-id", api.handleUpdateTask)
@@ -77,4 +77,12 @@ func (a *API) StartServer() error {
 
 func (a *API) Shutdown(ctx context.Context) error {
 	return a.echo.Shutdown(ctx)
+}
+
+func (a *API) StartSwagger() {
+	e := echo.New()
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
+	e.Logger.Fatal(e.Start(":8081"))
 }
