@@ -16,7 +16,8 @@ services:
       PG_URL: $APP_PG_URL
       STATIC_TOKEN: $APP_STATIC_TOKEN
     ports:
-      - $APP_PORT:8080
+      - 8080:8080
+      - 8081:8081
     restart: on-failure
     depends_on:
       postgres:
