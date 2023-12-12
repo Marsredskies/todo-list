@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/Marsredskies/todo-list/internal/envconfig"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func NewTokenValidator(cnf envconfig.Config) func(key string, c echo.Context) (bool, error) {

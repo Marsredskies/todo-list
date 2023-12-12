@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/Marsredskies/todo-list/internal/models"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func (a *API) handleCreateTask(c echo.Context) error {
@@ -30,7 +30,6 @@ func (a *API) handleCreateTask(c echo.Context) error {
 	a.Logger.Infof("task with id %d created: %+v", id, params)
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("task has been created successfuly with ID %d", id))
-
 }
 
 func (a *API) handleUpdateTask(c echo.Context) error {
