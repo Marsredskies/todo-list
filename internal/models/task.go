@@ -10,6 +10,13 @@ type Task struct {
 	Description string `json:"description"`
 }
 
+type Request struct {
+	Name        string `json:"name"`
+	Assignee    string `json:"assignee"`
+	Status      string `json:"status"`
+	Description string `json:"description"`
+}
+
 func (t *Task) Validate() error {
 	if t.Name == "" {
 		return errors.New("task name can't be empty")
