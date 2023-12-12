@@ -22,7 +22,7 @@ func main() {
 	api := api.MustInitNewAPI(ctx, cnf)
 
 	go func() {
-		if err := api.StartServer(cnf.Port); err != nil && err != http.ErrServerClosed {
+		if err := api.StartServer(); err != nil && err != http.ErrServerClosed {
 			api.Logger.Fatal("shutting down the server")
 		}
 	}()

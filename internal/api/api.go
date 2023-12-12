@@ -6,9 +6,10 @@ import (
 
 	"github.com/Marsredskies/todo-list/internal/db"
 	"github.com/Marsredskies/todo-list/internal/envconfig"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
+	_ "github.com/swaggo/echo-swagger/example/docs"
 )
 
 type API struct {
@@ -56,6 +57,8 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 		Logger: logger,
 	}
 
+	//e.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	e.GET("/search-with-filters", api.handleFindTask)
 	e.POST("/create", api.handleCreateTask)
 	e.PATCH("/update-by-id", api.handleUpdateTask)
@@ -64,8 +67,8 @@ func New(ctx context.Context, cnf envconfig.Config) (API, error) {
 	return api, nil
 }
 
-func (a *API) StartServer(port int) error {
-	err := a.echo.Start(fmt.Sprintf(":%d", port))
+func (a *API) StartServer() error {
+	err := a.echo.Start(":8080")
 	if err != nil {
 		return err
 	}
