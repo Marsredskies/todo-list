@@ -2,7 +2,7 @@ run:
 	docker-compose --env-file ./.env up --build
 
 db:
-	docker-compose up db 
+	docker-compose up postgres 
 
 test:
 	go get ./...
