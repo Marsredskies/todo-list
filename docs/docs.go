@@ -297,7 +297,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Todo-list service API",
-	Description:      "Your task managment server.",
+	Description:      "Demo task managment server API with 4 endpoints",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

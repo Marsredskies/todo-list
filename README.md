@@ -6,7 +6,7 @@ A containerized web server with database for todo list managment.
 Setup: 
 
 - Create a `.env` file in the repo directory using env.example. Make sure you've set all the variables. Even tho the app itself has it's own default values in case of missing envs, docker-compose however needs all required values.
-Set `APP_STATIC_TOKEN`, server will start with a token-auth middleware. Default token is `test_token`".
+`APP_STATIC_TOKEN` is needed to start the server with a token-auth middleware. Default token is `test_token`.
 
 - Run `make run`. It will build docker containers and expose an API at `localhost:8080`. 
 

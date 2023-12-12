@@ -27,7 +27,7 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: Your task managment server.
+  description: Demo task managment server API with 4 endpoints
   title: Todo-list service API
   version: "1.0"
 paths:

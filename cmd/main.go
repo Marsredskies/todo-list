@@ -14,7 +14,7 @@ import (
 
 // @title Todo-list service API
 // @version 1.0
-// @description Your task managment server.
+// @description Demo task managment server API with 4 endpoints
 
 // @host localhost:8080
 // @BasePath /
@@ -32,7 +32,7 @@ func main() {
 	api := api.MustInitNewAPI(ctx, cnf)
 
 	go func() { api.StartSwagger() }()
-	
+
 	go func() {
 		if err := api.StartServer(); err != nil && err != http.ErrServerClosed {
 			api.Logger.Fatal("shutting down the server")

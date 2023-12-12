@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Your task managment server.",
+        "description": "Demo task managment server API with 4 endpoints",
         "title": "Todo-list service API",
         "contact": {},
         "version": "1.0"
