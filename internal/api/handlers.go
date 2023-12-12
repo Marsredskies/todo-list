@@ -145,14 +145,18 @@ func (a *API) handleDeleteTask(c echo.Context) error {
 //		@Failure      400,404,500  {string}  stirng
 //		@Router       /search-with-filters [get]
 func (a *API) handleFindTask(c echo.Context) error {
-	params := models.Task{
+	p := models.Task{
 		Name:        c.FormValue("name"),
 		Description: c.FormValue("description"),
 		Assignee:    c.FormValue("assignee"),
 		Status:      c.FormValue("status"),
 	}
 
-	results, err := a.r.GetMatchingTasks(c.Request().Context(), params)
+	if p.Name == "" && p.Description == "" && p.Assignee == "" && p.Status == "" {
+		return c.JSON(http.StatusBadRequest, atLeastOneParamRequired)
+	}
+
+	results, err := a.r.GetMatchingTasks(c.Request().Context(), p)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 	}
