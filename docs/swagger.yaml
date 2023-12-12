@@ -1,0 +1,185 @@
+basePath: /
+definitions:
+  models.Request:
+    properties:
+      assignee:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Task:
+    properties:
+      assignee:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Your task managment server.
+  title: Todo-list service API
+  version: "1.0"
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Creates to-do entry in the database. Name and description are required
+        fields. Assignee value is optional. If status is empty default "to do" will
+        be set
+      parameters:
+      - description: Task description
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - StaticTokenAuth: []
+      summary: CreateTask
+      tags:
+      - to-do list
+  /delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete task by it's id
+      parameters:
+      - description: Task id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - StaticTokenAuth: []
+      summary: DeleteTask
+      tags:
+      - to-do list
+  /search-with-filters:
+    get:
+      consumes:
+      - application/json
+      description: Find a task by one or multiple parameters. Values may not be exact
+        same as stored in db. It can be one search parameter or multuple 'alike' ones.
+      parameters:
+      - description: Name
+        in: query
+        name: name
+        type: string
+      - description: Description
+        in: query
+        name: description
+        type: string
+      - description: Assignee
+        in: query
+        name: assignee
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - StaticTokenAuth: []
+      summary: FindTask
+      tags:
+      - to-do list
+  /update-by-id:
+    patch:
+      consumes:
+      - application/json
+      description: Update existing task by it's id
+      parameters:
+      - description: All fields are optional except the ID. Empty fileds will be ommited
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - StaticTokenAuth: []
+      summary: UpdateTask
+      tags:
+      - to-do list
+securityDefinitions:
+  StaticTokenAuth:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"
