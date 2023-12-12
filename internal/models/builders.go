@@ -52,19 +52,19 @@ func (t *Task) SqlSelectLike() (string, []interface{}, error) {
 	b := sq.Select("id", "name", "description", "status", "assignee").From("public.tasks")
 
 	if t.Name != "" {
-		b = b.Where("name LIKE ?", likeParam(t.Name))
+		b = b.Where("name ILIKE ?", likeParam(t.Name))
 	}
 
 	if t.Description != "" {
-		b = b.Where("description LIKE ?", likeParam(t.Description))
+		b = b.Where("description ILIKE ?", likeParam(t.Description))
 	}
 
 	if t.Assignee != "" {
-		b = b.Where("assignee LIKE ?", likeParam(t.Assignee))
+		b = b.Where("assignee ILIKE ?", likeParam(t.Assignee))
 	}
 
 	if t.Status != "" {
-		b = b.Where("status LIKE ?", likeParam(t.Status))
+		b = b.Where("status ILIKE ?", likeParam(t.Status))
 	}
 
 	b = b.Where("deleted_at IS NULL")
