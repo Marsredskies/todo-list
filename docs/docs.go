@@ -22,7 +22,7 @@ const docTemplate = `{
                         "StaticTokenAuth": []
                     }
                 ],
-                "description": "Creates to-do entry in the database. Name and description are required fields. Assignee value is optional. If status is empty default \"to do\" will be set",
+                "description": "Creates to-do entry in the database. Name, description and assignee are required fields. If status is empty default \"to do\" will be set",
                 "consumes": [
                     "application/json"
                 ],
