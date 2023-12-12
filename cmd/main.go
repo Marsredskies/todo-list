@@ -12,6 +12,16 @@ import (
 	"github.com/Marsredskies/todo-list/internal/envconfig"
 )
 
+// @title Todo-list service API
+// @version 1.0
+// @description Your task managment server.
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey StaticTokenAuth
+// @in header
+// @name token
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -21,6 +31,8 @@ func main() {
 
 	api := api.MustInitNewAPI(ctx, cnf)
 
+	go func() { api.StartSwagger() }()
+	
 	go func() {
 		if err := api.StartServer(); err != nil && err != http.ErrServerClosed {
 			api.Logger.Fatal("shutting down the server")
