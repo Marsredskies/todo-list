@@ -62,14 +62,14 @@ func TestFindTasks(t *testing.T) {
 
 	createParams1 := models.Task{
 		Name:        "first task",
-		Description: "description description task",
+		Description: "Description for the first task",
 		Assignee:    "person 1",
 		Status:      "done",
 	}
 
 	createParams2 := models.Task{
 		Name:        "secont task",
-		Description: "description for the second task",
+		Description: "Description for the second task",
 		Assignee:    "person 2",
 		Status:      "done",
 	}

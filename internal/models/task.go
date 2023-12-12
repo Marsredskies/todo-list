@@ -17,20 +17,32 @@ type Request struct {
 	Description string `json:"description"`
 }
 
+var (
+	errEmptyTaskName        = errors.New("task name can't be empty")
+	errEmptyTaskDescription = errors.New("task description can't be empty")
+	errInvalidTaskStatus    = errors.New(`invalid task status, can be either "to do" or "in progress" or "done"`)
+)
+
 func (t *Task) Validate() error {
 	if t.Name == "" {
-		return errors.New("task name can't be empty")
+		return errEmptyTaskName
 	}
 
 	if t.Description == "" {
-		return errors.New("task description can't be empty")
+		return errEmptyTaskDescription
 	}
 
+	return t.ValidateStatus()
+}
+
+func (t *Task) ValidateStatus() error {
 	if t.Status != "" {
 		if t.Status != todo && t.Status != inProgress && t.Status != done {
-			return errors.New(`invalid task status, can be either "to do" or "in progress" or "done"`)
+			return errInvalidTaskStatus
 		}
+		return nil
+	} else {
+		t.Status = todo
+		return nil
 	}
-
-	return nil
 }

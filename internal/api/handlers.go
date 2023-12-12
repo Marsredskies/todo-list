@@ -80,6 +80,11 @@ func (a *API) handleUpdateTask(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, noTasksFound)
 	}
 
+	err = params.ValidateStatus()
+	if err != nil {
+		return c.JSON(http.StatusNotFound, err.Error())
+	}
+
 	err = a.r.UpdateTaskById(c.Request().Context(), params)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
