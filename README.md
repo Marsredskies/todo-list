@@ -6,14 +6,14 @@ A containerized web server with database for todo list managment.
 Setup: 
 
 - Create a `.env` file in the repo directory using env.example. Make sure you've set all the variables. Even tho the app itself has it's own default values in case of missing envs, docker-compose however needs all required values.
-If you set an `APP_STATIC_TOKEN`, server will start with a token-auth middleware. Make sure to add `token` header with the value you set up in your .env file for each request.
-
+Set `APP_STATIC_TOKEN`, server will start with a token-auth middleware. Default token is `test_token`".
 
 - Run `make run`. It will build docker containers and expose an API at `localhost:8080`. 
 
 Usage:
-to be described in swagger.
+Swagger UI will be accessible at `http://localhost:8081/swagger/index.html#`
 
+Click `authorize` button and specify your token that you've set in .env (`APP_STATIC_TOKEN`). If you haven't specified a token, type anything and click 'Authorize' to sart using Swagger.
 
 
 # Running tests
