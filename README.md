@@ -15,6 +15,9 @@ Swagger UI will be accessible at `http://localhost:8081/swagger/index.html#`
 
 Click `authorize` button and specify your token that you've set in .env (`APP_STATIC_TOKEN`). If you haven't specified a token, type anything and click 'Authorize' to sart using Swagger.
 
+Task statuses can only be `to do`, `in progress` or `done`. It's being validated on any operation.
+
+Task search in `/search-with-filters` is implemented using query builder, so no matter how many fields are used for the search and how precise the input is. Case insensitive
 
 # Running tests
 
