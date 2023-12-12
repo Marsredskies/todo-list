@@ -18,9 +18,10 @@ Click `authorize` button and specify your token that you've set in .env (`APP_ST
 Task statuses can only be `to do`, `in progress` or `done`. It's being validated on any operation.
 
 Task search in `/search-with-filters` is implemented using query builder, so no matter how many fields are used for the search and how precise the input is. Case insensitive
+Updating tasks via `/search-with-filters` uses query builders as well to be able to update only required fields
 
 # Running tests
 
 - Run `make db`
 - In separate terminal window run `make test`
-- Run `make stop` after tests finish
+- Run `make clean` after tests finish
